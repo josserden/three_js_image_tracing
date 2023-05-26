@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  input[type="range"][orient="vertical"] {
+    writing-mode: bt-lr;
+    -webkit-appearance: slider-vertical;
+  }
+
+  .iconButton {
+    @apply transition-all duration-300 hover:scale-110 hover:text-lime-300 focus:scale-110 focus:text-lime-300;
+  }
+}
