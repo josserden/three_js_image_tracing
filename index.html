@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Tracing</title>
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+    />
+    <script type="module" crossorigin src="/assets/index-b35af364.js"></script>
+    <link rel="stylesheet" href="/assets/index-3cf755f5.css">
+  </head>
+
+  <body
+    class="w-full h-full bg-gray-800 font-sans text-base text-slate-100 overflow-hidden"
+  >
+    <header class="border-b border-b-2 border-gray-600 py-5">
+      <div class="container">
+        <p
+          class="flex items-center gap-3 text-2xl font-semibold tracking-wider"
+        >
+          <span class="material-symbols-outlined text-lime-300"> image </span>
+          Image Tracing Test
+        </p>
+      </div>
+    </header>
+
+    <div
+      id="lightSettingWrapper"
+      class="absolute left-5 top-1/2 z-10 flex -translate-y-1/2 flex-col items-center justify-center gap-3 rounded-2xl border border-gray-600 bg-gray-800 px-1.5 py-6 hidden"
+    >
+      <span class="material-symbols-outlined font-bold"> dark_mode </span>
+
+      <input
+        class="h-28 w-8 p-1.5"
+        type="range"
+        orient="vertical"
+        id="lightRange"
+        name="lightRange"
+        min="0"
+        max="5"
+        step="0.001"
+      />
+      <span class="material-symbols-outlined font-bold"> light_mode </span>
+    </div>
+
+    <main>
+      <div id="app"></div>
+    </main>
+
+    <footer class="py-2 fixed z-50 bottom-0 left-0 w-full">
+      <div class="container">
+        <div
+          class="mx-auto flex w-full max-w-[260px] items-center justify-center gap-5 overflow-x-scroll rounded-3xl border border-gray-600 bg-gray-800 px-4 py-2"
+        >
+          <p class="mr-auto text-lg font-medium text-lime-300">Tools</p>
+
+          <button id="lightSetting" class="iconButton" type="button">
+            <span class="material-symbols-outlined"> light_mode </span>
+          </button>
+
+          <input
+            class="sr-only"
+            type="file"
+            id="getBackground"
+            name="getBackground"
+            accept="image/png, image/jpeg"
+          />
+
+          <button class="iconButton" id="uploadBackground" type="button">
+            <span class="material-symbols-outlined"> folder_open </span>
+          </button>
+
+          <button class="iconButton" id="captureScreen" type="button">
+            <span class="material-symbols-outlined"> save </span>
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    
+  </body>
+</html>
