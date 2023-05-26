@@ -3,6 +3,10 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import { getCaptureScreen } from './utils/getCaptureScreen.js';
 import { handleLightSettingClick } from './utils/handleLightSettingClick.js';
+import { initCamera } from './utils/initCamera.js';
+import { initControls } from './utils/initControls.js';
+import { initDirectLight } from './utils/initDirectLight.js';
+import { initRenderer } from './utils/initRenderer.js';
 import { refs } from './utils/refs.js';
 
 // Global Variables
@@ -18,48 +22,51 @@ const camera = new THREE.OrthographicCamera(
 );
 const controls = new OrbitControls(camera, renderer.domElement);
 const directLight = new THREE.DirectionalLight(0xffffff, 1);
+// const pointLight = new THREE.PointLight(0xffffff, 1, 1000);
 
 // Initialize scene
 const initScene = () => {
   scene.background = new THREE.Color(0x222831);
-
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMap.enabled = true;
-
   refs.root.appendChild(renderer.domElement);
 
-  camera.position.set(0, 1, window.innerHeight);
+  // pointLight.position.set(1, 0, 0);
+  // scene.add(pointLight);
 
-  controls.enableDamping = true;
-  controls.update();
-  controls.enabled = false;
-
-  directLight.position.set(1, 1, 1);
-  scene.add(directLight);
+  initRenderer(renderer);
+  initCamera(camera);
+  initControls(controls);
+  initDirectLight(directLight, scene);
 };
 
-// change Background
-const changeBackground = () => {
-  let file = refs.getBackground.files[0];
-  let reader = new FileReader();
-
+// Change Background
+const changeBackground = async () => {
+  const file = refs.getBackground.files[0];
   if (!file) return;
 
-  reader.onloadend = () => {
-    let bgTexture = new THREE.TextureLoader().load(reader.result);
-    let floor = new THREE.Mesh(
+  try {
+    const reader = new FileReader();
+    const bgTexture = await new Promise((resolve, reject) => {
+      reader.onload = () =>
+        resolve(new THREE.TextureLoader().load(reader.result));
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    const material = new THREE.Mesh(
       new THREE.BoxGeometry(window.innerWidth, window.innerHeight, 0),
-      new THREE.MeshPhongMaterial({ map: bgTexture, transparent: false })
+      new THREE.MeshPhysicalMaterial({
+        map: bgTexture,
+        side: THREE.DoubleSide,
+      })
     );
 
-    floor.position.set(0, 0, 0);
-    floor.rotation.set(Math.PI, 0, -Math.PI);
-    floor.isDraggable = false;
-    scene.add(floor);
-  };
+    material.position.set(0, 0, 0);
+    material.rotation.set(Math.PI, 0, -Math.PI);
 
-  reader.readAsDataURL(file);
+    scene.add(material);
+  } catch (error) {
+    console.error('Error:', error);
+  }
 };
 
 // Handle upload background click
@@ -102,7 +109,7 @@ refs.uploadBackground.addEventListener('click', handleUploadBackgroundClick);
 refs.captureScreen.addEventListener('click', () =>
   getCaptureScreen({ renderer, scene, camera })
 );
-refs.lightRange.addEventListener('change', handleLightColorChange);
+refs.lightRange.addEventListener('input', handleLightColorChange);
 refs.lightSetting.addEventListener('click', () =>
   handleLightSettingClick(refs.lightSettingWrapper)
 );
