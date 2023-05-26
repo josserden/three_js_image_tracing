@@ -1,11 +1,9 @@
-import "../css/style.css";
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-
-import { getCaptureScreen } from "./utils/getCaptureScreen.js";
-import { handleLightSettingClick } from "./utils/handleLightSettingClick.js";
-import { refs } from "./utils/refs.js";
+import { getCaptureScreen } from './utils/getCaptureScreen.js';
+import { handleLightSettingClick } from './utils/handleLightSettingClick.js';
+import { refs } from './utils/refs.js';
 
 // Global Variables
 const renderer = new THREE.WebGLRenderer();
@@ -56,7 +54,7 @@ const changeBackground = () => {
     );
 
     floor.position.set(0, 0, 0);
-    floor.rotation.set(Math.PI / 1, 0, -Math.PI);
+    floor.rotation.set(Math.PI, 0, -Math.PI);
     floor.isDraggable = false;
     scene.add(floor);
   };
@@ -65,15 +63,15 @@ const changeBackground = () => {
 };
 
 // Handle upload background click
-const handleUploadBackgroundClick = (e) => {
+const handleUploadBackgroundClick = () => {
   if (!refs.getBackground) return;
 
   refs.getBackground.click();
-  refs.getBackground.addEventListener("change", changeBackground);
+  refs.getBackground.addEventListener('change', changeBackground);
 };
 
 // Change light color
-const handleLightColorChange = (e) => {
+const handleLightColorChange = e => {
   const { value } = e.target;
   directLight.position.x = value;
 };
@@ -96,16 +94,16 @@ const animate = () => {
 const runApp = () => {
   initScene();
   animate();
-  window.addEventListener("resize", onWindowResize, true);
+  window.addEventListener('resize', onWindowResize, true);
 };
 
 //Listeners
-refs.uploadBackground.addEventListener("click", handleUploadBackgroundClick);
-refs.captureScreen.addEventListener("click", () =>
+refs.uploadBackground.addEventListener('click', handleUploadBackgroundClick);
+refs.captureScreen.addEventListener('click', () =>
   getCaptureScreen({ renderer, scene, camera })
 );
-refs.lightRange.addEventListener("change", handleLightColorChange);
-refs.lightSetting.addEventListener("click", () =>
+refs.lightRange.addEventListener('change', handleLightColorChange);
+refs.lightSetting.addEventListener('click', () =>
   handleLightSettingClick(refs.lightSettingWrapper)
 );
-window.addEventListener("load", runApp);
+window.addEventListener('load', runApp);
